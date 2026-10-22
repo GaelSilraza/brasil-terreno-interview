@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Shared\Finance.Shared.Domain\Finance.Shared.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Shared\Finance.Shared.Application\Finance.Shared.Application.csproj" />
+    <ProjectReference Include="..\..\src\Shared\Finance.Shared.Infrastructure\Finance.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Shared\Finance.Shared.Presentation\Finance.Shared.Presentation.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Accounts\Finance.Modules.Accounts.Domain\Finance.Modules.Accounts.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Accounts\Finance.Modules.Accounts.Contracts\Finance.Modules.Accounts.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Accounts\Finance.Modules.Accounts.Application\Finance.Modules.Accounts.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Accounts\Finance.Modules.Accounts.Infrastructure\Finance.Modules.Accounts.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Accounts\Finance.Modules.Accounts.Presentation\Finance.Modules.Accounts.Presentation.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Transfers\Finance.Modules.Transfers.Domain\Finance.Modules.Transfers.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Transfers\Finance.Modules.Transfers.Application\Finance.Modules.Transfers.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Transfers\Finance.Modules.Transfers.Infrastructure\Finance.Modules.Transfers.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Transfers\Finance.Modules.Transfers.Presentation\Finance.Modules.Transfers.Presentation.csproj" />
+  </ItemGroup>
+</Project>

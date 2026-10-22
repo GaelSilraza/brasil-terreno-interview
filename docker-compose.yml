@@ -1,0 +1,86 @@
+name: finance
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: finance
+      POSTGRES_USER: finance
+      POSTGRES_PASSWORD: finance
+    ports:
+      - "${POSTGRES_HOST_PORT:-55432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finance -d finance"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: finance
+      RABBITMQ_DEFAULT_PASS: finance
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+
+  migrator:
+    build:
+      context: ./finance-api
+      target: migrator
+    environment:
+      ConnectionStrings__Finance: "Host=postgres;Port=5432;Database=finance;Username=finance;Password=finance"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    build:
+      context: ./finance-api
+      target: api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Finance: "Host=postgres;Port=5432;Database=finance;Username=finance;Password=finance"
+      OpenApi__Enabled: "true"
+      Cors__AllowedOrigins__0: "http://localhost:3000"
+      Cors__AllowedOrigins__1: "http://localhost:5173"
+    ports:
+      - "8080:8080"
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+
+  worker:
+    build:
+      context: ./finance-api
+      target: worker
+    environment:
+      DOTNET_ENVIRONMENT: Production
+      ConnectionStrings__Finance: "Host=postgres;Port=5432;Database=finance;Username=finance;Password=finance"
+      RabbitMq__HostName: rabbitmq
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+      rabbitmq:
+        condition: service_healthy
+
+  front:
+    build:
+      context: ./finance-front
+      args:
+        VITE_API_URL: "http://localhost:8080/api"
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+volumes:
+  postgres-data:

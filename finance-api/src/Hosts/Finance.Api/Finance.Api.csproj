@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Accounts\Finance.Modules.Accounts.Infrastructure\Finance.Modules.Accounts.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Accounts\Finance.Modules.Accounts.Presentation\Finance.Modules.Accounts.Presentation.csproj" />
+    <ProjectReference Include="..\..\Modules\Transfers\Finance.Modules.Transfers.Infrastructure\Finance.Modules.Transfers.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Transfers\Finance.Modules.Transfers.Presentation\Finance.Modules.Transfers.Presentation.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
+  </ItemGroup>
+</Project>

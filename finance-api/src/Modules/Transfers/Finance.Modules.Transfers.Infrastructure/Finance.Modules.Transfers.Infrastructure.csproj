@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Finance.Modules.Transfers.Application\Finance.Modules.Transfers.Application.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Finance.Shared.Infrastructure\Finance.Shared.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,13 @@
+bin/
+obj/
+.vs/
+.idea/
+*.user
+TestResults/
+coverage/
+node_modules/
+dist/
+.env
+*.log
+benchmark/results/*
+!benchmark/results/.gitkeep

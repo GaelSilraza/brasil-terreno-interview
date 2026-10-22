@@ -1,0 +1,36 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/Finance.Shared.Domain/Finance.Shared.Domain.csproj" />
+    <Project Path="src/Shared/Finance.Shared.Application/Finance.Shared.Application.csproj" />
+    <Project Path="src/Shared/Finance.Shared.Infrastructure/Finance.Shared.Infrastructure.csproj" />
+    <Project Path="src/Shared/Finance.Shared.Presentation/Finance.Shared.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Accounts/">
+    <Project Path="src/Modules/Accounts/Finance.Modules.Accounts.Domain/Finance.Modules.Accounts.Domain.csproj" />
+    <Project Path="src/Modules/Accounts/Finance.Modules.Accounts.Contracts/Finance.Modules.Accounts.Contracts.csproj" />
+    <Project Path="src/Modules/Accounts/Finance.Modules.Accounts.Application/Finance.Modules.Accounts.Application.csproj" />
+    <Project Path="src/Modules/Accounts/Finance.Modules.Accounts.Infrastructure/Finance.Modules.Accounts.Infrastructure.csproj" />
+    <Project Path="src/Modules/Accounts/Finance.Modules.Accounts.Presentation/Finance.Modules.Accounts.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Transfers/">
+    <Project Path="src/Modules/Transfers/Finance.Modules.Transfers.Domain/Finance.Modules.Transfers.Domain.csproj" />
+    <Project Path="src/Modules/Transfers/Finance.Modules.Transfers.Application/Finance.Modules.Transfers.Application.csproj" />
+    <Project Path="src/Modules/Transfers/Finance.Modules.Transfers.Infrastructure/Finance.Modules.Transfers.Infrastructure.csproj" />
+    <Project Path="src/Modules/Transfers/Finance.Modules.Transfers.Presentation/Finance.Modules.Transfers.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Hosts/">
+    <Project Path="src/Hosts/Finance.Api/Finance.Api.csproj" />
+    <Project Path="src/Hosts/Finance.Worker/Finance.Worker.csproj" />
+    <Project Path="src/Hosts/Finance.Migrator/Finance.Migrator.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Finance.Testing/Finance.Testing.csproj" />
+    <Project Path="tests/Finance.Shared.Infrastructure.Tests/Finance.Shared.Infrastructure.Tests.csproj" />
+    <Project Path="tests/Finance.Modules.Accounts.Tests/Finance.Modules.Accounts.Tests.csproj" />
+    <Project Path="tests/Finance.Modules.Transfers.Tests/Finance.Modules.Transfers.Tests.csproj" />
+    <Project Path="tests/Finance.EndToEnd.Tests/Finance.EndToEnd.Tests.csproj" />
+    <Project Path="tests/Finance.Architecture.Tests/Finance.Architecture.Tests.csproj" />
+  </Folder>
+</Solution>

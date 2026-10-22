@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Finance.Modules.Transfers.Application\Finance.Modules.Transfers.Application.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Finance.Shared.Presentation\Finance.Shared.Presentation.csproj" />
+  </ItemGroup>
+</Project>

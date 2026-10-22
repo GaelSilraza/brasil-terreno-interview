@@ -1,0 +1,3 @@
+namespace Finance.Modules.Transfers.Application.UseCases.DispatchDueScheduledTransfers;
+
+public sealed record DispatchDueScheduledTransfersResult(int StartedTransferCount, int TimedOutTransferCount);

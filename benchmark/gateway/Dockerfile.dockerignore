@@ -1,0 +1,13 @@
+**/node_modules
+**/dist
+**/coverage
+**/bin
+**/obj
+**/.env
+.claude
+docs
+finance-api
+benchmark/results
+benchmark/k6
+benchmark/seed
+benchmark/sql

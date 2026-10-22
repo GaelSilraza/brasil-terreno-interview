@@ -1,0 +1,142 @@
+name: finance-benchmark
+
+x-finance-connection: &finance-connection "Host=postgres;Port=5432;Database=finance;Username=finance;Password=finance"
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200 -c shared_buffers=256MB
+    environment:
+      POSTGRES_DB: finance
+      POSTGRES_USER: finance
+      POSTGRES_PASSWORD: finance
+    volumes:
+      - benchmark-postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finance -d finance"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1g
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: finance
+      RABBITMQ_DEFAULT_PASS: finance
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512m
+
+  migrator:
+    build:
+      context: ../finance-api
+      target: migrator
+    environment:
+      DOTNET_ENVIRONMENT: Production
+      ConnectionStrings__Finance: *finance-connection
+      Seed__Enabled: "false"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256m
+
+  seed:
+    image: postgres:18-alpine
+    command: psql -v ON_ERROR_STOP=1 -h postgres -U finance -d finance -f /seed/seed.sql
+    environment:
+      PGPASSWORD: finance
+    volumes:
+      - ./seed:/seed:ro
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+    restart: "no"
+
+  api:
+    build:
+      context: ../finance-api
+      target: api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Finance: *finance-connection
+      OpenApi__Enabled: "false"
+      Logging__LogLevel__Default: Warning
+      Cors__AllowedOrigins__0: http://localhost:8088
+      Cors__AllowedOrigins__1: http://localhost:8088
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512m
+
+  worker:
+    build:
+      context: ../finance-api
+      target: worker
+    environment:
+      DOTNET_ENVIRONMENT: Production
+      ConnectionStrings__Finance: *finance-connection
+      Logging__LogLevel__Default: Warning
+      RabbitMq__HostName: rabbitmq
+      Outbox__PollingIntervalSeconds: "1"
+      Outbox__BatchSize: "500"
+      ScheduledTransfers__PollingIntervalSeconds: "1"
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256m
+
+  gateway:
+    build:
+      context: ..
+      dockerfile: benchmark/gateway/Dockerfile
+    ports:
+      - "8088:80"
+    depends_on:
+      - api
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 128m
+
+  k6:
+    image: grafana/k6:2.3.0
+    profiles: ["load"]
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    environment:
+      BASE_URL: http://gateway
+      ALLOWED_ORIGIN: http://localhost:8088
+      RESULTS_DIRECTORY: /results
+    volumes:
+      - ./k6:/scripts:ro
+      - ${RESULTS_DIR:-./results}:/results
+
+volumes:
+  benchmark-postgres-data:
